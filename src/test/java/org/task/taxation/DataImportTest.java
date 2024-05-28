@@ -17,9 +17,10 @@ import java.util.Date;
 public class DataImportTest {
 
     private final String tableName = "fo_random";
+    private final String filePath = "fo_random.txt";
     private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
-    private final String jdbcUrl = "jdbc:mysql://localhost:3306/taxation";
-    //        String jdbcUrl = "jdbc:log4jdbc:mysql://localhost:3306/taxation"; // add logging
+    private final String jdbcUrl = "jdbc:mysql://localhost:3306/taxation?allowLoadLocalInfile=true";
+    //        String jdbcUrl = "jdbc:log4jdbc:mysql://localhost:3306/taxation?allowLoadLocalInfile=true"; // add logging
     private final String username = "root";
     private final String pass = "root";
 
@@ -34,8 +35,6 @@ public class DataImportTest {
         long start = System.currentTimeMillis();
 
         System.out.println("Execution started: " + new Date());
-
-        String filePath = "fo_random.txt";
         // Read and parse the file
         List<DataRow> dataRows = readAndSortData(filePath);
 
@@ -55,7 +54,6 @@ public class DataImportTest {
 
             connection.setAutoCommit(false);
             try (Statement statement = connection.createStatement()) {
-                //statement.execute("SET GLOBAL max_allowed_packet = 20 * 1024 * 1024");
                 long n = 1;
                 StringBuffer values = new StringBuffer();
                 for (DataRow dataRow : dataRows) {
@@ -87,12 +85,10 @@ public class DataImportTest {
     }
 
     @Test
-    void fileInsertPerformanceTest() throws IOException{
+    void fileInsertPerformanceTest() throws IOException {
         long start = System.currentTimeMillis();
 
         System.out.println("Execution started: " + new Date());
-
-        String filePath = "fo_random.txt";
         // Read and parse the file
         List<DataRow> dataRows = readAndSortData(filePath);
 
@@ -102,7 +98,7 @@ public class DataImportTest {
 
         System.out.println("Writing sorted data to tmp file to be later imported in mysql table.");
         File tempFile = File.createTempFile("tmpData", ".txt");
-        tempFile.deleteOnExit();
+        //tempFile.deleteOnExit();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
             for (DataRow row : dataRows) {
                 row.setTime(LocalDateTime.now().format(dtf));

@@ -46,7 +46,7 @@ public class TaxationService {
                     ));
                 } else {
                     taxationResponse.setTaxAmount(trader.getTaxValue());
-                    taxationResponse.setTaxRate(trader.getTaxValue().divide(winings));
+                    taxationResponse.setTaxRate(trader.getTaxValue().divide(winings, 6, BigDecimal.ROUND_HALF_UP));
                 }
                 taxationResponse.setPossibleReturnAmountAfterTax(taxationResponse.getPossibleReturnAmountBefTax().subtract(taxationResponse.getTaxAmount()));
                 taxationResponse.setPossibleReturnAmount(taxationResponse.getPossibleReturnAmountBefTax().subtract(taxationResponse.getTaxAmount()));
@@ -60,7 +60,7 @@ public class TaxationService {
                     ));
                 } else {
                     taxationResponse.setTaxAmount(trader.getTaxValue());
-                    taxationResponse.setTaxRate(trader.getTaxValue().divide(taxationResponse.getPossibleReturnAmountBefTax()));
+                    taxationResponse.setTaxRate(trader.getTaxValue().divide(taxationResponse.getPossibleReturnAmountBefTax(), 6, BigDecimal.ROUND_HALF_UP));
                 }
                 taxationResponse.setPossibleReturnAmountAfterTax(taxationResponse.getPossibleReturnAmountBefTax().subtract(taxationResponse.getTaxAmount()));
                 taxationResponse.setPossibleReturnAmount(taxationResponse.getPossibleReturnAmountBefTax().subtract(taxationResponse.getTaxAmount()));
